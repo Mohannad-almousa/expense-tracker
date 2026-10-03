@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Expense Tracker</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-dark shadow-sm">
+
+        <div class="container">
+
+            <span class="navbar-brand mb-0 h1">
+                Expense Tracker
+            </span>
+        <!-- Dark Mode Switch -->
+<div class="theme-toggle">
+    <span>Light</span>
+    <label class="theme-switch">
+        <input type="checkbox" id="darkModeSwitch" role="switch" aria-label="Dark mode">
+        <span class="theme-slider"></span>
+    </label>
+    <span>Dark</span>
+</div>
+        </div>
+
+    </nav>
+
+
+    <main class="container py-4">
+
+        <h2 class="mb-4">
+            My Expenses
+        </h2>
+
+
+        <!-- Error Alert -->
+        <div id="errorMessage" class="alert alert-danger d-none" role="alert">
+        </div>
+
+
+        <!-- Success Alert -->
+        <div id="successMessage" class="alert alert-success d-none" role="alert">
+        </div>
+
+
+        <!-- Summary Cards -->
+        <div class="summary-grid mb-4">
+
+            <!-- Total Expenses -->
+            <div>
+
+                <div class="card shadow-sm h-100">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Total Expenses
+                        </h6>
+
+                        <h3 id="totalAmount">
+                            0.00
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Number of Expenses -->
+            <div>
+
+                <div class="card shadow-sm h-100">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Number of Expenses
+                        </h6>
+
+                        <h3 id="expenseCount">
+                            0
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Highest Expense -->
+            <div>
+
+                <div class="card shadow-sm h-100">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Highest Expense
+                        </h6>
+
+                        <h3 id="highestExpense">
+                            0.00
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Add Expense -->
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-header">
+
+                <h5 class="mb-0">
+                    Add Expense
+                </h5>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <form id="expenseForm" novalidate>
+
+                    <div class="row g-3">
+
+                        <!-- Title -->
+                        <div class="col-12 col-md-6 col-lg-3">
+
+                            <label for="title" class="form-label">
+                                Title
+                            </label>
+
+                            <input type="text" id="title" class="form-control" placeholder="Example: Lunch">
+
+                            <div id="titleError" class="invalid-feedback">
+                                Title is required.
+                            </div>
+
+                        </div>
+
+
+                        <!-- Amount -->
+                        <div class="col-12 col-md-6 col-lg-3">
+
+                            <label for="amount" class="form-label">
+                                Amount
+                            </label>
+
+                            <input type="number" id="amount" class="form-control" min="0.01" step="0.01"
+                                placeholder="0.00">
+
+                            <div id="amountError" class="invalid-feedback">
+                                Amount must be greater than zero.
+                            </div>
+
+                        </div>
+
+
+                        <!-- Category -->
+                        <div class="col-12 col-md-6 col-lg-3">
+
+                            <label for="category" class="form-label">
+                                Category
+                            </label>
+
+                            <select id="category" class="form-select">
+
+                                <option value="">
+                                    Choose category
+                                </option>
+
+                                <option value="Food">
+                                    Food
+                                </option>
+
+                                <option value="Transport">
+                                    Transport
+                                </option>
+
+                                <option value="Bills">
+                                    Bills
+                                </option>
+
+                                <option value="Entertainment">
+                                    Entertainment
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                            <div id="categoryError" class="invalid-feedback">
+                                Please choose a category.
+                            </div>
+
+                        </div>
+
+
+                        <!-- Date -->
+                        <div class="col-12 col-md-6 col-lg-3">
+
+                            <label for="date" class="form-label">
+                                Date
+                            </label>
+
+                            <input type="date" id="date" class="form-control">
+
+                            <div id="dateError" class="invalid-feedback">
+                                Date is required.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary mt-3">
+                        Add Expense
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- Loading Spinner -->
+        <div id="loading" class="text-center my-4 d-none">
+
+            <div class="spinner-border text-primary" role="status">
+            </div>
+
+            <p class="mt-2">
+                Loading expenses...
+            </p>
+
+        </div>
+
+
+        <!-- Expenses -->
+        <div class="card shadow-sm">
+
+            <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+
+                <h5 class="mb-0">
+                    Expenses List
+                </h5>
+
+
+                <!-- Category Filter -->
+                <div class="filter-box">
+
+                    <label for="categoryFilter" class="me-2">
+                        Filter:
+                    </label>
+
+                    <select id="categoryFilter" class="form-select">
+
+                        <option value="All">
+                            All
+                        </option>
+
+                        <option value="Food">
+                            Food
+                        </option>
+
+                        <option value="Transport">
+                            Transport
+                        </option>
+
+                        <option value="Bills">
+                            Bills
+                        </option>
+
+                        <option value="Entertainment">
+                            Entertainment
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-striped table-hover align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Title</th>
+
+                                <th>Amount</th>
+
+                                <th>Category</th>
+
+                                <th>Date</th>
+
+                                <th>Actions</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="expensesTable">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- Edit Expense Modal -->
+    <div class="modal fade" id="editExpenseModal" tabindex="-1" aria-hidden="true">
+
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        Edit Expense
+                    </h5>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+
+                <div class="modal-body">
+
+                    <form id="editExpenseForm" novalidate>
+
+                        <input type="hidden" id="editId">
+
+
+                        <div class="mb-3">
+
+                            <label for="editTitle" class="form-label">
+                                Title
+                            </label>
+
+                            <input type="text" id="editTitle" class="form-control">
+
+                            <div id="editTitleError" class="invalid-feedback">
+                                Title is required.
+                            </div>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label for="editAmount" class="form-label">
+                                Amount
+                            </label>
+
+                            <input type="number" id="editAmount" class="form-control" min="0.01" step="0.01">
+                            <div id="editAmountError" class="invalid-feedback">
+                                Amount must be greater than zero.
+                            </div>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label for="editCategory" class="form-label">
+                                Category
+                            </label>
+
+                            <select id="editCategory" class="form-select">
+
+                                <option value="Food">
+                                    Food
+                                </option>
+
+                                <option value="Transport">
+                                    Transport
+                                </option>
+
+                                <option value="Bills">
+                                    Bills
+                                </option>
+
+                                <option value="Entertainment">
+                                    Entertainment
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+                            <div id="editAmountError" class="invalid-feedback">
+                                Amount must be greater than zero.
+                            </div>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label for="editDate" class="form-label">
+                                Date
+                            </label>
+
+                            <input type="date" id="editDate" class="form-control">
+                            <div id="editDateError" class="invalid-feedback">
+                                Date is required.
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+
+
+                    <button type="button" id="saveEditButton" class="btn btn-primary">
+                        Save Changes
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <!-- Our JavaScript -->
+    <script src="js/app.js"></script>
+
+
+</body>
+
+</html>
