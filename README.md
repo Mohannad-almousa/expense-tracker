@@ -6,7 +6,7 @@ Users can add, edit, delete, and filter expenses, while the application displays
 
 ## How to run
 
-**Backend**
+Backend
 
 1. Make sure Node.js and PostgreSQL are installed.
 2. Create a PostgreSQL database named expense_tracker.
@@ -26,7 +26,7 @@ node server.js
 9. The backend will run on:
 http://localhost:3000
 
-**Frontend**
+Frontend
 1. Keep the backend server running.
 2. Open the project frontend folder in VS Code.
 3. Open index.html using Live Server.
@@ -34,16 +34,16 @@ http://localhost:3000
 http://localhost:3000/api/expenses 
 
 
-**API Endpoints**
+API Endpoints
 
 The application provides the following REST API endpoints:
 
-Method	Endpoint	              Purpose
-GET	    /api/expenses	       Retrieve all expenses
-GET	    /api/expenses/:id	  Retrieve one expense
-POST	    /api/expenses	       Create a new expense
-PUT	    /api/expenses/:id	  Update an expense
-DELETE	/api/expenses/:id	  Delete an expense
+Method Endpoint               Purpose
+GET     /api/expenses        Retrieve all expenses
+GET     /api/expenses/:id   Retrieve one expense
+POST     /api/expenses        Create a new expense
+PUT     /api/expenses/:id   Update an expense
+DELETE /api/expenses/:id   Delete an expense
 ## Features
 
 - [✅ ] Add an expense (with validation)
@@ -61,3 +61,8 @@ DELETE	/api/expenses/:id	  Delete an expense
 
 ## What was the hardest part?
 The hardest part was connecting the frontend directly to the backend API and making sure that adding, editing, and deleting expenses updated the table and summary cards correctly. I solved this by using fetch with async/await, handling errors with try/catch, and calling the GET API again after each successful operation to refresh the data from PostgreSQL.
+
+## Project Links
+
+- **GitHub Repository:** [Expense Tracker](https://github.com/Mohannad-almousa/expense-tracker)
+- **Demo Video:** [Watch Demo](https://drive.google.com/file/d/10o4xTT1UsXgMdUZLvVuktyrU5OzFhSHb/view?usp=sharing)
