@@ -548,7 +548,7 @@ saveEditButton.addEventListener(
             }
 
 
-            editModal.hide();
+            editModal.hide();  //أغلق Modal.
 
 
             showSuccess(
@@ -671,7 +671,7 @@ function showError(message) {
 
     errorMessage.classList.remove(
         "d-none"
-    );
+    ) ;
 
 }
 
